@@ -1,0 +1,33 @@
+pipeline {
+    agent { label 'slave1' }
+    stages {
+        stage('Clone') {
+            steps {
+                git branch: 'main', url: 'https://github.com/shetty220/mindcircuit17d-test.git'
+                echo "Code cloning completed"
+            }
+        }
+        stage('Build') {
+            steps {
+                sh 'mvn clean install'
+                echo "Code build completed"
+            }
+        }
+        stage('Deploy') {
+            steps {
+                deploy adapters: [
+                    tomcat9(
+                        alternativeDeploymentContext: '',
+                        credentialsId: 'tomcat',
+                        path: '',
+                        url: 'http://32.198.22.210:8080/'
+                    )
+                ],
+                contextPath: '/tmp',
+                onFailure: false,
+                war: '**/*.war'
+                echo "Code deploy completed"
+            }
+        }
+    }
+}
