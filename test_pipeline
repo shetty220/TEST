@@ -26,7 +26,7 @@ pipeline {
                 contextPath: '/tmp',
                 onFailure: false,
                 war: '**/*.war'
-                echo "Code deploy completed"
+              
             }
         }
     }
