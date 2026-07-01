@@ -1,0 +1,24 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('clone') {
+            steps {
+			git branch: 'main', url: 'https://github.com/shetty220/TEST.git'
+                echo 'clone'
+            }
+        }
+		 stage('build') {
+            steps {
+			sh 'mvn clean install'
+                echo 'build'
+            }
+        }
+		 stage('deploy') {
+            steps {
+			deploy adapters: [tomcat9(alternativeDeploymentContext: '', credentialsId: 'tomcat', path: '', url: 'http://98.86.238.239:8080/')], contextPath: 'facebook', war: '**/*.war'
+                echo 'deployed'
+            }
+        }
+    }
+}
